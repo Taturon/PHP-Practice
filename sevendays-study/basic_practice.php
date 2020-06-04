@@ -77,5 +77,30 @@ if ($a != 3) {
 	echo "こんにちは";
 }
 
-//  
+// prob.3-1
+$a = array(500, 600, 700);
+var_dump($a);
+
+// prob.3-2
+$a = array(5 => 300, 10 => 900, 15 => 230);
+var_dump($a);
+
+// prob.3-3
+$a = array("tiger" => "おはよう", "rabbit" => "こんにちは", "cow" => "こんばんわ");
+var_dump($a);
+
+// prob.3-4
+array_splice($a, 2, 1);
+$a[2] = 300;
+var_dump($a);
+
+// prob.3-5
+$a = array();
+for ($i = 1; $i <= 10; $i++) {
+	array_push($a, $i);
+}
+foreach ($a as $b) {
+	echo $b . "\n";
+}
+
 ?>
