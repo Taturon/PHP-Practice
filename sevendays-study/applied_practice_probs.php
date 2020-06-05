@@ -30,4 +30,38 @@ if (preg_match($reg_exp, $str)) {
 echo "\n";
 ?>
 <br>
-
+<?php
+echo "prob.2-1\n";
+$file = fopen("example.php", "r");
+fpassthru($file);
+fclose($file);
+?>
+<br>
+<?php
+echo "prob.2-2\n";
+$text = "Thank you!\n";
+$file = fopen("example.php", "a+");
+fwrite($file, $text);
+fpassthru($file);
+fclose($file);
+?>
+<br>
+<?php
+echo "prob.2-3\n";
+$date = getdate();
+$y = $date['year'];
+$m = sprintf("%02d", $date['mon']);
+$d = sprintf("%02d", $date['mday']);
+echo $y . "年" . $m . "月" . $d . "日\n";
+?>
+<br>
+<?php
+echo "prob.2-4\n";
+$date = date("L");
+if ($date == 1) {
+	echo "今年は閏年です";
+} else {
+	echo "今年は閏年ではありません";
+}
+?>
+<br>
