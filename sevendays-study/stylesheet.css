@@ -1,0 +1,21 @@
+table {
+	border: ridge;
+	margin-top: 15px;
+}
+
+#id {
+	text-align: center;
+}
+
+#name {
+	text-align: center;
+}
+
+th {
+	border: ridge;
+	width: 200px;
+}
+
+td {
+	border: ridge;
+}
