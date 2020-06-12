@@ -4,32 +4,19 @@ $playerHand = $_POST['playerHand'];
 $key = array_rand($hands);
 $pcHand = $hands[$key];
 
-if ($playerHand == $pcHand) {
-	$result = 'あいこ';
-} else {
-	switch ($playerHand) {
-		case 'グー':
-			if ($pcHand == 'チョキ') {
-				$result = '勝ち';
-			} else {
-				$result = '負け';
-			}
-			break;
-		case 'チョキ':
-			if ($pcHand == 'パー') {
-				$result = '勝ち';
-			} else {
-				$result = '負け';
-			}
-			break;
-		case 'パー':
-			if ($pcHand == 'グー') {
-				$result = '勝ち';
-			} else {
-				$result = '負け';
-			}
-			break;
-	}
+switch ($playerHand) {
+	case ($playerHand === $pcHand):
+		$result = 'あいこ';
+		break;
+	case 'グー':
+		$result = ($pcHand === 'チョキ') ? '勝ち' : '負け';
+		break;
+	case 'チョキ':
+		$result = ($pcHand === 'パー') ? '勝ち' : '負け';
+		break;
+	case 'パー':
+		$result = ($pcHand === 'グー') ? '勝ち' : '負け';
+		break;
 }
 
 ?>
