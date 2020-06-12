@@ -16,11 +16,29 @@ try {
 			$stmt = $db->query('select * from state_master');
 			$prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			break;
+		case 'metropolice':
+			$stmt = $db->prepare('select * from state_master where STATE_NAME like ?');
+			$stmt->execute(['%都']);
+			$prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			break;
+		case 'do':
+			$stmt = $db->prepare('select * from state_master where STATE_NAME like ?');
+			$stmt->execute(['%道%']);
+			$prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			break;
 		case 'urban':
-			
+			$stmt = $db->prepare('select * from state_master where STATE_NAME like ?');
+			$stmt->execute(['%府%']);
+			$prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			break;
 		case 'pref':
-			
+			$stmt = $db->prepare('select * from state_master where STATE_NAME like ?');
+			$stmt->execute(['%県%']);
+			$prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			break;
+		default:
+			$stmt = $db->query('select * from state_master');
+			$prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			break;
 	}
 
@@ -44,8 +62,10 @@ try {
 <form action="" method="POST">
 <select name="show_method" size="1">
 <option value="all">全ての都道府県を表示</option>
-<option value="pref">県を表示</option>
+<option value="metropolice">都を表示</option>
+<option value="do">道を表示</option>
 <option value="urban">府を表示</option>
+<option value="pref">県を表示</option>
 </select>
 <input type="submit" value="表示">
 <table>
