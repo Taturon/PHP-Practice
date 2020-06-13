@@ -11,3 +11,4 @@
 	* [詳解PHP 基礎文法編](https://dotinstall.com/lessons/basic_php_grammer)
 	* [【旧版】MySQL入門](https://dotinstall.com/lessons/basic_mysql_v2)
 	* [PHP5.6 データベース入門](https://dotinstall.com/lessons/basic_php_db)
+* [言語処理100本ノック 2020 (Rev 1)](https://nlp100.github.io/ja/)
