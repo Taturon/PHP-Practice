@@ -28,3 +28,16 @@ $ans = '';
 $ans = implode(array_map('strlen', $str));
 echo $ans . "\n";
 
+// 04
+$ans = [];
+$sentence = 'Hi He Lied Because Boron Could Not Oxidize Fluorine. New Nations Might Also Sign Peace Security Clause. Arthur King Can.';
+$words = str_word_count($sentence, 1);
+$cond = array(1, 5, 6, 7, 8, 9, 15, 16, 19);
+for ($i = 0; $i < count($words); $i++) {
+	if (in_array($i, $cond)) {
+		$ans[$i] = substr($words[$i], 0, 1);
+	} else {
+		$ans[$i] = substr($words[$i], 0, 2);
+	}
+}
+var_dump($ans);
