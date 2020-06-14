@@ -41,3 +41,4 @@ for ($i = 0; $i < count($words); $i++) {
 	}
 }
 var_dump($ans);
+
