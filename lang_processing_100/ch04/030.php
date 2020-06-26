@@ -19,4 +19,4 @@ foreach ($lines as $line) {
 	$morphs[$i] = $morph;
 	$i++;
 }
-
+var_dump($morphs);
