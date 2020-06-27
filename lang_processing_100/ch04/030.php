@@ -1,6 +1,7 @@
 <?php
 $lines = file('neko.txt.mecab');
 
+// 形態素解析結果の格納
 $i = 0;
 foreach ($lines as $line) {
 	if ($line === "EOS\n") {
@@ -19,4 +20,3 @@ foreach ($lines as $line) {
 	$morphs[$i] = $morph;
 	$i++;
 }
-var_dump($morphs);
