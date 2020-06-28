@@ -1,3 +1,19 @@
+<?php
+const FILENAME = 'message.txt';
+date_default_timezone_set('Asia/Tokyo');
+
+if (isset($_POST['btn_submit'])) {
+	if ($file_handle = fopen(FILENAME, 'a')) {
+		$now_date = date("Y-m-d H:i:s");
+		$name = $_POST['view_name'];
+		$message = $_POST['message'];
+		$data = $name . ',' . $message . ',' . $now_date . "\n";
+		fwrite($file_handle, $data);
+		fclose($file_handle);
+	}
+
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
