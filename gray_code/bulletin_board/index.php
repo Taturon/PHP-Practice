@@ -2,6 +2,10 @@
 const FILENAME = 'message.txt';
 date_default_timezone_set('Asia/Tokyo');
 
+$file_handle = $now_date = $name = $message = $data = $split_data = null;
+$posts = [];
+
+$data = null;
 if (isset($_POST['btn_submit'])) {
 	if ($file_handle = fopen(FILENAME, 'a')) {
 		$now_date = date("Y-m-d H:i:s");
@@ -11,7 +15,13 @@ if (isset($_POST['btn_submit'])) {
 		fwrite($file_handle, $data);
 		fclose($file_handle);
 	}
+}
 
+if ($file_handle = fopen(FILENAME, 'r')) {
+	while ($data = fgets($file_handle)) {
+		$posts[] = explode(',', $data);
+	}	
+	fclose($file_handle);
 }
 ?>
 <!DOCTYPE html>
@@ -34,6 +44,19 @@ if (isset($_POST['btn_submit'])) {
 </div>
 <input type="submit" name="btn_submit" value="書き込む">
 </form>
+<hr>
+<section>
+<?php if (!empty($posts)): ?>
+<?php foreach ($posts as $post): ?>
+<article>
+<div class="info">
+<h2><?php echo $post[0]; ?></h2>
+<time><?php echo $post[2]; ?></time>
+</div>
+<p><?php echo $post[1]; ?></p>
+</article>
+<?php endforeach; ?>
+<?php endif; ?>
 <hr>
 <section>
 <!-- ここに投稿されたメッセージを表示 -->
