@@ -2,7 +2,8 @@
 const FILENAME = 'message.txt';
 date_default_timezone_set('Asia/Tokyo');
 
-$file_handle = $now_date = $name = $message = $data = $split_data = null;
+// 変数の初期化
+$file_handle = $now_date = $name = $message = $data = $split_data = $success_message = null;
 $posts = [];
 
 $data = null;
@@ -14,6 +15,7 @@ if (isset($_POST['btn_submit'])) {
 		$data = $name . ',' . $message . ',' . $now_date . "\n";
 		fwrite($file_handle, $data);
 		fclose($file_handle);
+		$success_message = 'メッセージを書き込みました';
 	}
 }
 
@@ -29,6 +31,9 @@ if ($file_handle = fopen(FILENAME, 'r')) {
 <head>
 <meta charset="utf-8">
 <title>ひと言掲示板</title>
+<?php if (isset($success_message)): ?>
+<p class="success_message"><?php echo $success_message; ?></p>
+<?php endif ?>
 <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
