@@ -4,21 +4,29 @@ date_default_timezone_set('Asia/Tokyo');
 
 // 変数の初期化
 $file_handle = $now_date = $name = $message = $data = $split_data = $success_message = null;
-$posts = $error_messages = [];
+$posts = $error_messages = $clean = [];
 
 $data = null;
 if (isset($_POST['btn_submit'])) {
+	// 表示名のバリデーションとサニタイズ
 	if (empty($_POST['view_name'])) {
 		$error_messages[] = '表示名を入力して下さい';
+	} else {
+		$clean['view_name'] = htmlspecialchars($_POST['view_name'], ENT_QUOTES);
+		$clean['view_name'] = preg_replace('/\\r\\n|\\n|\\r/', '', $clean['view_name']);
 	}
+	// メッセージのバリデーションとサニタイズ
 	if (empty($_POST['message'])) {
 		$error_messages[] = '一言メッセージを入力して下さい';
+	} else {
+		$clean['message'] = htmlspecialchars($_POST['message'], ENT_QUOTES);
+		$clean['message'] = preg_replace('/\\r\\n|\\n|\\r/', '<br>', $clean['message']);
 	}
 	if (empty($error_messages)) {
 		if ($file_handle = fopen(FILENAME, 'a')) {
-			$now_date = date("Y-m-d H:i:s");
-			$name = $_POST['view_name'];
-			$message = $_POST['message'];
+			$now_date = "'" . date("Y-m-d H:i:s");
+			$name = $clean['view_name'] . "'";
+			$message = "'" . $clean['message'] . "'";
 			$data = $name . ',' . $message . ',' . $now_date . "\n";
 			fwrite($file_handle, $data);
 			fclose($file_handle);
@@ -29,7 +37,7 @@ if (isset($_POST['btn_submit'])) {
 
 if ($file_handle = fopen(FILENAME, 'r')) {
 	while ($data = fgets($file_handle)) {
-		$posts[] = explode(',', $data);
+		$posts[] = explode("','", $data);
 	}
 	fclose($file_handle);
 }
