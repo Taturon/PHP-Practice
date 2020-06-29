@@ -4,25 +4,33 @@ date_default_timezone_set('Asia/Tokyo');
 
 // 変数の初期化
 $file_handle = $now_date = $name = $message = $data = $split_data = $success_message = null;
-$posts = [];
+$posts = $error_messages = [];
 
 $data = null;
 if (isset($_POST['btn_submit'])) {
-	if ($file_handle = fopen(FILENAME, 'a')) {
-		$now_date = date("Y-m-d H:i:s");
-		$name = $_POST['view_name'];
-		$message = $_POST['message'];
-		$data = $name . ',' . $message . ',' . $now_date . "\n";
-		fwrite($file_handle, $data);
-		fclose($file_handle);
-		$success_message = 'メッセージを書き込みました';
+	if (empty($_POST['view_name'])) {
+		$error_messages[] = '表示名を入力して下さい';
+	}
+	if (empty($_POST['message'])) {
+		$error_messages[] = '一言メッセージを入力して下さい';
+	}
+	if (empty($error_messages)) {
+		if ($file_handle = fopen(FILENAME, 'a')) {
+			$now_date = date("Y-m-d H:i:s");
+			$name = $_POST['view_name'];
+			$message = $_POST['message'];
+			$data = $name . ',' . $message . ',' . $now_date . "\n";
+			fwrite($file_handle, $data);
+			fclose($file_handle);
+			$success_message = 'メッセージを書き込みました';
+		}
 	}
 }
 
 if ($file_handle = fopen(FILENAME, 'r')) {
 	while ($data = fgets($file_handle)) {
 		$posts[] = explode(',', $data);
-	}	
+	}
 	fclose($file_handle);
 }
 ?>
@@ -31,13 +39,20 @@ if ($file_handle = fopen(FILENAME, 'r')) {
 <head>
 <meta charset="utf-8">
 <title>ひと言掲示板</title>
-<?php if (isset($success_message)): ?>
-<p class="success_message"><?php echo $success_message; ?></p>
-<?php endif ?>
 <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
 <h1>ひと言掲示板</h1>
+<?php if (isset($success_message)): ?>
+<p class="success_message"><?php echo $success_message; ?></p>
+<?php endif ?>
+<?php if (!empty($error_messages)): ?>
+<ul class="error_messages">
+<?php foreach ($error_messages as $error_message): ?>
+<li>・<?php echo $error_message; ?></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
 <form method='POST'>
 <div>
 <label for="view_name">表示名</label>
@@ -62,9 +77,6 @@ if ($file_handle = fopen(FILENAME, 'r')) {
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
-<hr>
-<section>
-<!-- ここに投稿されたメッセージを表示 -->
 </section>
 </body>
 </html>
