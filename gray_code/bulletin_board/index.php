@@ -15,6 +15,7 @@ if (isset($_POST['btn_submit'])) {
 		$clean['view_name'] = htmlspecialchars($_POST['view_name'], ENT_QUOTES);
 		$clean['view_name'] = preg_replace('/\\r\\n|\\n|\\r/', '', $clean['view_name']);
 	}
+
 	// メッセージのバリデーションとサニタイズ
 	if (empty($_POST['message'])) {
 		$error_messages[] = '一言メッセージを入力して下さい';
@@ -22,16 +23,40 @@ if (isset($_POST['btn_submit'])) {
 		$clean['message'] = htmlspecialchars($_POST['message'], ENT_QUOTES);
 		$clean['message'] = preg_replace('/\\r\\n|\\n|\\r/', '<br>', $clean['message']);
 	}
+
 	if (empty($error_messages)) {
-		if ($file_handle = fopen(FILENAME, 'a')) {
-			$now_date = "'" . date("Y-m-d H:i:s");
-			$name = $clean['view_name'] . "'";
-			$message = "'" . $clean['message'] . "'";
-			$data = $name . ',' . $message . ',' . $now_date . "\n";
-			fwrite($file_handle, $data);
-			fclose($file_handle);
-			$success_message = 'メッセージを書き込みました';
+		/*
+		   if ($file_handle = fopen(FILENAME, 'a')) {
+		   $now_date = "'" . date("Y-m-d H:i:s");
+		   $name = $clean['view_name'] . "'";
+		   $message = "'" . $clean['message'] . "'";
+		   $data = $name . ',' . $message . ',' . $now_date . "\n";
+		   fwrite($file_handle, $data);
+		   fclose($file_handle);
+		   $success_message = 'メッセージを書き込みました';
+		   }
+		 */
+
+		// DB接続
+		$mysqli = new mysqli('localhost', 'root', 'root', 'board');
+
+		// DB接続エラーの確認
+		if ($mysqli->connect_errno) {
+			$error_messages[] = 'DBへの書き込みに失敗しました エラー番号' . $mysqli->connect_errno . ' : ' . $mysqli->connect_error;
+		} else {
+			$mysqli->set_charset('utf8');
+			$now_date = date('Y-m-d H:i:s');
+			$sql = "insert into message (view_name, message, post_date) values ('$clean[view_name]','$clean[message]','$now_date')";
+			$res = $mysqli->query($sql);
 		}
+
+		if ($res) {
+			$success_message = 'メッセージを書き込みました';
+		} else {
+			$error_messages[] = '書き込みに失敗しました';
+		}
+
+		$mysqli->close();
 	}
 }
 
@@ -42,6 +67,7 @@ if ($file_handle = fopen(FILENAME, 'r')) {
 	fclose($file_handle);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
