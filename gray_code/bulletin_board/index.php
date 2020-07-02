@@ -60,11 +60,30 @@ if (isset($_POST['btn_submit'])) {
 	}
 }
 
+/*
 if ($file_handle = fopen(FILENAME, 'r')) {
 	while ($data = fgets($file_handle)) {
 		$posts[] = explode("','", $data);
 	}
 	fclose($file_handle);
+}
+*/
+
+// DB接続
+$mysqli = new mysqli('localhost', 'root', 'root', 'board');
+
+// DB接続エラーの確認
+if ($mysqli->connect_errno) {
+	$error_messages[] = 'DBへの読み込みに失敗しました エラー番号' . $mysqli->connect_errno . ' : ' . $mysqli->connect_error;
+} else {
+	$sql = 'select view_name, message, post_date from message order by post_date desc';
+	$res = $mysqli->query($sql);
+
+	if ($res) {
+		$posts = $res->fetch_all(MYSQLI_ASSOC);
+	}
+
+	$mysqli->close();
 }
 ?>
 
@@ -76,6 +95,7 @@ if ($file_handle = fopen(FILENAME, 'r')) {
 <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
+<?php var_dump($posts); ?>
 <h1>ひと言掲示板</h1>
 <?php if (isset($success_message)): ?>
 <p class="success_message"><?php echo $success_message; ?></p>
