@@ -77,6 +77,7 @@ if ($mysqli->connect_errno) {
 	$error_messages[] = 'DBへの読み込みに失敗しました エラー番号' . $mysqli->connect_errno . ' : ' . $mysqli->connect_error;
 } else {
 	$sql = 'select view_name, message, post_date from message order by post_date desc';
+	$mysqli->query('set names utf8mb4');
 	$res = $mysqli->query($sql);
 
 	if ($res) {
@@ -124,10 +125,10 @@ if ($mysqli->connect_errno) {
 <?php foreach ($posts as $post): ?>
 <article>
 <div class="info">
-<h2><?php echo $post[0]; ?></h2>
-<time><?php echo $post[2]; ?></time>
+<h2><?php echo $post['view_name']; ?></h2>
+<time><?php echo $post['post_date']; ?></time>
 </div>
-<p><?php echo $post[1]; ?></p>
+<p><?php echo $post['message']; ?></p>
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
