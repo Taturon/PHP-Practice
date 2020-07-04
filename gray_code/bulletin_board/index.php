@@ -1,5 +1,11 @@
 <?php
-const FILENAME = 'message.txt';
+// DB接続定数の定義
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', 'root');
+define('DB_NAME', 'board');
+
+// タイムゾーンの設定
 date_default_timezone_set('Asia/Tokyo');
 
 // 変数の初期化
@@ -25,20 +31,9 @@ if (isset($_POST['btn_submit'])) {
 	}
 
 	if (empty($error_messages)) {
-		/*
-		   if ($file_handle = fopen(FILENAME, 'a')) {
-		   $now_date = "'" . date("Y-m-d H:i:s");
-		   $name = $clean['view_name'] . "'";
-		   $message = "'" . $clean['message'] . "'";
-		   $data = $name . ',' . $message . ',' . $now_date . "\n";
-		   fwrite($file_handle, $data);
-		   fclose($file_handle);
-		   $success_message = 'メッセージを書き込みました';
-		   }
-		 */
 
 		// DB接続
-		$mysqli = new mysqli('localhost', 'root', 'root', 'board');
+		$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 		// DB接続エラーの確認
 		if ($mysqli->connect_errno) {
@@ -60,17 +55,8 @@ if (isset($_POST['btn_submit'])) {
 	}
 }
 
-/*
-if ($file_handle = fopen(FILENAME, 'r')) {
-	while ($data = fgets($file_handle)) {
-		$posts[] = explode("','", $data);
-	}
-	fclose($file_handle);
-}
-*/
-
 // DB接続
-$mysqli = new mysqli('localhost', 'root', 'root', 'board');
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // DB接続エラーの確認
 if ($mysqli->connect_errno) {
@@ -96,7 +82,6 @@ if ($mysqli->connect_errno) {
 <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-<?php var_dump($posts); ?>
 <h1>ひと言掲示板</h1>
 <?php if (isset($success_message)): ?>
 <p class="success_message"><?php echo $success_message; ?></p>
