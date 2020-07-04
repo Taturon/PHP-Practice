@@ -1,4 +1,7 @@
 <?php
+// セッションの開始・再開
+session_start();
+
 // DB接続定数の定義
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -20,6 +23,8 @@ if (isset($_POST['btn_submit'])) {
 	} else {
 		$clean['view_name'] = htmlspecialchars($_POST['view_name'], ENT_QUOTES);
 		$clean['view_name'] = preg_replace('/\\r\\n|\\n|\\r/', '', $clean['view_name']);
+		// セションに表示名を保存
+		$_SESSION['view_name'] = $clean['view_name'];
 	}
 
 	// メッセージのバリデーションとサニタイズ
@@ -96,7 +101,9 @@ if ($mysqli->connect_errno) {
 <form method='POST'>
 <div>
 <label for="view_name">表示名</label>
-<input id="view_name" type="text" name="view_name">
+<input id="view_name" type="text" name="view_name" value="<?php
+if (!empty($_SESSION['view_name'])) echo $_SESSION['view_name'];
+?>">
 </div>
 <div>
 <label for="message">一言メッセージ</label>
