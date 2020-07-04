@@ -8,6 +8,9 @@ define('DB_USER', 'root');
 define('DB_PASS', 'root');
 define('DB_NAME', 'board');
 
+// ログインパスワードの設定
+define('PASSWORD', 'adminpassword');
+
 // タイムゾーンの設定
 date_default_timezone_set('Asia/Tokyo');
 
@@ -17,6 +20,11 @@ $posts = $error_messages = $clean = [];
 
 $data = null;
 if (isset($_POST['btn_submit'])) {
+	if (isset($_POST['admin_password']) && $_POST['admin_password'] === PASSWORD) {
+		$_SESSION['admin_login'] = true;
+	} else {
+		$error_messages[] = 'パスワードが間違っています';
+	}
 }
 
 // DB接続
@@ -55,6 +63,7 @@ if ($mysqli->connect_errno) {
 </ul>
 <?php endif; ?>
 <section>
+<?php if (!empty($_SESSION['admin_login']) && $_SESSION['admin_login']): ?>
 <?php if (!empty($posts)): ?>
 <?php foreach ($posts as $post): ?>
 <article>
@@ -65,6 +74,15 @@ if ($mysqli->connect_errno) {
 <p><?php echo $post['message']; ?></p>
 </article>
 <?php endforeach; ?>
+<?php endif; ?>
+<?php else: ?>
+<form method="POST">
+<div>
+<label for="admin_password">ログインパスワード</label>
+<input id="admin_password" type="password" name="admin_password">
+</div>
+<input type="submit" name="btn_submit" value="ログイン">
+</form>
 <?php endif; ?>
 </section>
 </body>
