@@ -34,7 +34,7 @@ $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($mysqli->connect_errno) {
 	$error_messages[] = 'DBへの読み込みに失敗しました エラー番号' . $mysqli->connect_errno . ' : ' . $mysqli->connect_error;
 } else {
-	$sql = 'select view_name, message, post_date from message order by post_date desc';
+	$sql = 'select id, view_name, message, post_date from message order by post_date desc';
 	$mysqli->query('set names utf8mb4');
 	$res = $mysqli->query($sql);
 
@@ -77,6 +77,10 @@ if ($mysqli->connect_errno) {
 <div class="info">
 <h2><?php echo $post['view_name']; ?></h2>
 <time><?php echo $post['post_date']; ?></time>
+<p>
+<a href="edit.php?message_id=<?php echo $value['id']; ?>">編集</a> 
+<a href="delete.php?message_id=<?php echo $value['id']; ?>">削除</a> 
+</p>
 </div>
 <p><?php echo $post['message']; ?></p>
 </article>
