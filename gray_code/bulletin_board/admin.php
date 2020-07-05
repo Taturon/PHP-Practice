@@ -64,6 +64,11 @@ if ($mysqli->connect_errno) {
 <section>
 <?php if (!empty($_SESSION['admin_login']) && $_SESSION['admin_login']): ?>
 <form method="GET" action="./download.php">
+<select name="limit">
+<option value="">全件</option>
+<option value="10">10件</option>
+<option value="30">30件</option>
+</select>
 <input type="submit" name="btn_download" value="ダウンロード">
 </form>
 <?php if (!empty($posts)): ?>

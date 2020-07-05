@@ -13,6 +13,16 @@ $csv_data = null;
 $sql = null;
 $res = null;
 $posts = [];
+$limit = null;
+
+// 取得件数の設定
+if (!empty($_GET['limit'])) {
+	if ($_GET['limit'] === '10') {
+		$limit = 10;
+	} elseif ($_GET['limit'] === '30') {
+		$limit = 30;
+	}
+}
 
 if (!empty($_SESSION['admin_login'] && $_SESSION['admin_login'] === true)) {
 
@@ -27,7 +37,11 @@ if (!empty($_SESSION['admin_login'] && $_SESSION['admin_login'] === true)) {
 	// DB接続エラーの確認
 	if (!$mysqli->connect_errno) {
 		$mysqli->set_charset('utf8');
-		$sql = 'select * from message order by post_date asc';
+		if (isset($limit)) {
+			$sql = "select * from message order by post_date asc limit $limit";
+		} else {
+			$sql = 'select * from message order by post_date asc';
+		}
 		$res = $mysqli->query($sql);
 		if ($res) {
 			$posts = $res->fetch_all(MYSQLI_ASSOC);
