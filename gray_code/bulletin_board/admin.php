@@ -45,7 +45,6 @@ if ($mysqli->connect_errno) {
 	$mysqli->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -64,6 +63,9 @@ if ($mysqli->connect_errno) {
 <?php endif; ?>
 <section>
 <?php if (!empty($_SESSION['admin_login']) && $_SESSION['admin_login']): ?>
+<form method="GET" action="./download.php">
+<input type="submit" name="btn_download" value="ダウンロード">
+</form>
 <?php if (!empty($posts)): ?>
 <?php foreach ($posts as $post): ?>
 <article>
