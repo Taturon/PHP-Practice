@@ -32,7 +32,6 @@ if (isset($_POST['btn_submit'])) {
 		$error_messages[] = '一言メッセージを入力して下さい';
 	} else {
 		$clean['message'] = htmlspecialchars($_POST['message'], ENT_QUOTES);
-		$clean['message'] = preg_replace('/\\r\\n|\\n|\\r/', '<br>', $clean['message']);
 	}
 
 	if (empty($error_messages)) {
@@ -120,7 +119,7 @@ if (!empty($_SESSION['view_name'])) echo $_SESSION['view_name'];
 <h2><?php echo $post['view_name']; ?></h2>
 <time><?php echo $post['post_date']; ?></time>
 </div>
-<p><?php echo $post['message']; ?></p>
+<p><?php echo nl2br($post['message']); ?></p>
 </article>
 <?php endforeach; ?>
 <?php endif; ?>

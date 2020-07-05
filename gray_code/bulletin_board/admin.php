@@ -78,11 +78,11 @@ if ($mysqli->connect_errno) {
 <h2><?php echo $post['view_name']; ?></h2>
 <time><?php echo $post['post_date']; ?></time>
 <p>
-<a href="edit.php?message_id=<?php echo $value['id']; ?>">編集</a> 
-<a href="delete.php?message_id=<?php echo $value['id']; ?>">削除</a> 
+<a href="edit.php?message_id=<?php echo $post['id']; ?>">編集</a> 
+<a href="delete.php?message_id=<?php echo $post['id']; ?>">削除</a> 
 </p>
 </div>
-<p><?php echo $post['message']; ?></p>
+<p><?php echo nl2br($post['message']); ?></p>
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
