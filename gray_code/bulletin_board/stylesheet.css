@@ -183,6 +183,13 @@ hr {
 	text-decoration: none;
 }
 
+.text-confirm {
+	margin-bottom: 20px;
+	font-size: 86%;
+	line-height: 1.6em;
+}
+
+
 .success_message {
     margin-bottom: 20px;
     padding: 10px;
