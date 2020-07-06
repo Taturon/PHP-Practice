@@ -18,7 +18,10 @@ date_default_timezone_set('Asia/Tokyo');
 $file_handle = $now_date = $name = $message = $data = $split_data = $success_message = null;
 $posts = $error_messages = $clean = [];
 
-$data = null;
+if (!empty($_GET['btn_logout'])) {
+	unset($_SESSION['admin_login']);
+}
+
 if (isset($_POST['btn_submit'])) {
 	if (isset($_POST['admin_password']) && $_POST['admin_password'] === PASSWORD) {
 		$_SESSION['admin_login'] = true;
@@ -86,6 +89,9 @@ if ($mysqli->connect_errno) {
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
+<form method="get" action="">
+<input type="submit" name="btn_logout" value="ログアウト">
+</form>
 <?php else: ?>
 <form method="POST">
 <div>
