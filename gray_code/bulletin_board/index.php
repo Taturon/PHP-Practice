@@ -12,7 +12,7 @@ define('DB_NAME', 'board');
 date_default_timezone_set('Asia/Tokyo');
 
 // 変数の初期化
-$file_handle = $now_date = $name = $message = $data = $split_data = $success_message = null;
+$file_handle = $now_date = $name = $message = $data = $split_data = null;
 $posts = $error_messages = $clean = [];
 
 $data = null;
@@ -47,15 +47,15 @@ if (isset($_POST['btn_submit'])) {
 			$now_date = date('Y-m-d H:i:s');
 			$sql = "insert into message (view_name, message, post_date) values ('$clean[view_name]','$clean[message]','$now_date')";
 			$res = $mysqli->query($sql);
-		}
 
-		if ($res) {
-			$success_message = 'メッセージを書き込みました';
-		} else {
-			$error_messages[] = '書き込みに失敗しました';
+			if ($res) {
+				$_SESSION['success_message'] = 'メッセージを書き込みました';
+			} else {
+				$error_messages[] = '書き込みに失敗しました';
+			}
+			$mysqli->close();
 		}
-
-		$mysqli->close();
+		header('Location: ./');
 	}
 }
 
@@ -87,8 +87,9 @@ if ($mysqli->connect_errno) {
 </head>
 <body>
 <h1>ひと言掲示板</h1>
-<?php if (isset($success_message)): ?>
-<p class="success_message"><?php echo $success_message; ?></p>
+<?php if (empty($_POST['btn_submit']) && isset($_SESSION['success_message'])): ?>
+<p class="success_message"><?php echo $_SESSION['success_message']; ?></p>
+<?php unset($_SESSION['success_message']); ?>
 <?php endif ?>
 <?php if (!empty($error_messages)): ?>
 <ul class="error_messages">
