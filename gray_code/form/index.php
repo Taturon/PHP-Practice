@@ -68,11 +68,15 @@ if (!empty($_POST['btn_confirm'])) {
 <form method="POST">
 <div class="element_wrap">
 <label for="name">氏名</label>
-<input id="name" type="text" name="name" value="">
+<input id="name" type="text" name="name" value="<?php
+if (!empty($_POST['name'])) echo $_POST['name'];
+?>">
 </div>
 <div class="element_wrap">
 <label for="email">メールアドレス</label>
-<input id="email" type="text" name="email" value="">
+<input id="email" type="text" name="email" value="<?php
+if (!empty($_POST['email'])) echo $_POST['email'];
+?>">
 </div>
 <input type="submit" name="btn_confirm" value="入力内容を確認する">
 </form>
