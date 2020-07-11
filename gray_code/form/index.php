@@ -9,9 +9,15 @@ if (!empty($_POST['btn_confirm'])) {
 	$page_flg = 2;
 
 	// 変数の設定
+	$header = null;
 	$auto_reply_subject = null;
 	$auto_reply_text = null;
 	date_default_timezone_set('Asia/Tokyo');
+
+	// ヘッダー情報を設定
+	$header = "MIME-Version: 1.0\n";
+	$header .= "From: GRYCODE <noreply@gray-code.con>\n";
+	$header .= "Reply-To: GRYCODE <noreply@gray-code.con>\n";
 
 	// 件名を設定
 	$auto_reply_subject = 'お問い合わせありがとうございます';
@@ -24,7 +30,11 @@ if (!empty($_POST['btn_confirm'])) {
 	$auto_reply_text .= 'タツロン®️';
 
 	// メール送信
-	mb_send_mail($_POST['email'], $auto_reply_subject, $auto_reply_text);
+	if (mb_send_mail($_POST['email'], $auto_reply_subject, $auto_reply_text, $header)) {
+		$message = 'メールを送信致しました';
+	} else {
+		$message = 'メール送信に失敗しました';
+	}
 }
 ?>
 
@@ -53,7 +63,7 @@ if (!empty($_POST['btn_confirm'])) {
 <input type="hidden" name="email" value="<?php echo $_POST['email']; ?>">
 </form>
 <?php elseif ($page_flg === 2): ?>
-<p>送信が完了しました</p>
+<p><?php echo $message; ?></p>
 <?php else: ?>
 <form method="POST">
 <div class="element_wrap">
