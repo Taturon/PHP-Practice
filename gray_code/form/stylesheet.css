@@ -59,3 +59,21 @@ label {
 	margin:  0;
 	text-align: left;
 }
+
+label[for=gender_male],
+label[for=gender_female],
+label[for=agreement] {
+	margin-right: 10px;
+	width: auto;
+	font-weight: normal;
+}
+
+textarea[name=contact] {
+	padding: 5px 10px;
+	width: 60%;
+	height: 100px;
+	font-size: 86%;
+	border: none;
+	border-radius: 3px;
+	background: #ddf0ff;
+}

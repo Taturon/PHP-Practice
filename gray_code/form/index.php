@@ -1,5 +1,4 @@
 <?php
-var_dump($_POST);
 // 変数の初期化
 $page_flg = 0;
 
@@ -77,6 +76,32 @@ if (!empty($_POST['name'])) echo $_POST['name'];
 <input id="email" type="text" name="email" value="<?php
 if (!empty($_POST['email'])) echo $_POST['email'];
 ?>">
+</div>
+<div class="element_wrap">
+<label>性別</label>
+<label><input type="radio" name="gender" value="male">男性</label>
+<label><input type="radio" name="gender" value="female">女性</label>
+</div>
+<div class="element_wrap">
+<label for="age">年齢</label>
+<select id="age" name="age">
+<option value="">選択して下さい</option>
+<option value="1">〜１９歳</option>
+<option value="2">２０歳〜２９歳</option>
+<option value="3">３０歳〜３９歳</option>
+<option value="4">４０歳〜４９歳</option>
+<option value="5">５０歳〜５９歳</option>
+<option value="6">６０歳〜</option>
+</select>
+</div>
+<div class="element_wrap">
+<label for="contact">お問い合わせ内容</label>
+<textarea id="contact" name="contact"></textarea>
+</div>
+<div class="element_wrap">
+<label>
+<input type="checkbox" name="agreement" value="1">プライバシーポリシーに同意する
+</label>
 </div>
 <input type="submit" name="btn_confirm" value="入力内容を確認する">
 </form>
