@@ -1,4 +1,7 @@
 <?php
+// ファイルアップロード先の定義
+define('FILE_DIR', 'images/test/');
+
 // 変数の初期化
 $page_flg = 0;
 $clean = $error = [];
@@ -14,6 +17,17 @@ if (!empty($_POST['btn_confirm'])) {
 
 	$error = validation($clean);
 	
+	// ファイルのアップロード
+	if (!empty($_FILES['attachment_file']['tmp_name'])) {
+		$upload_res = move_uploaded_file($_FILES['attachment_file']['tmp_name'], FILE_DIR . $_FILES['attachment_file']['name']);
+
+		if (!$upload_res) {
+			$error[] = 'ファイルのアップロードに失敗しました';
+		} else {
+			$clean['attachment_file'] = $_FILES['attachment_file']['name'];
+		}
+	}
+
 	if (empty($error)) {
 		$page_flg = 1;
 	}
@@ -93,7 +107,7 @@ function validation($data) {
 	// メールアドレスのバリデーション
 	if (empty($data['email'])) {
 		$error[] = 'メールアドレスに空欄は無効です';
-	} elseif (!preg_match(!(bool)filter_var($email, FILTER_VALIDATE_EMAIL))) {
+	} elseif (!(bool)filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
 		$error[] = 'メールアドレスが有効ではありません';
 	}
 
@@ -211,7 +225,7 @@ if ($_POST['agreement'] === "1") {
 <?php endforeach; ?>
 </ul>
 <?php endif; ?>
-<form method="POST">
+<form method="POST" action="" enctype="multipart/form-data">
 <div class="element_wrap">
 <label for="name">氏名</label>
 <input id="name" type="text" name="name" value="<?php
@@ -262,6 +276,10 @@ if (!empty($_POST['age']) && $_POST['age'] === '6') echo 'selected';
 <textarea id="contact" name="contact"><?php
 if (!empty($_POST['contact'])) echo $_POST['contact'];
 ?></textarea>
+</div>
+<div class="element_wrap">
+<label for="file">画像ファイルの添付</label>
+<input type="file" id="file" name="attachment_file">
 </div>
 <div class="element_wrap">
 <label>
