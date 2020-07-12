@@ -158,31 +158,51 @@ if (!empty($_POST['email'])) echo $_POST['email'];
 </div>
 <div class="element_wrap">
 <label>性別</label>
-<label><input type="radio" name="gender" value="male">男性</label>
-<label><input type="radio" name="gender" value="female">女性</label>
+<label><input type="radio" name="gender" value="male" <?php
+if (!empty($_POST['gender']) && $_POST['gender'] === 'male') echo 'checked';
+?>>男性</label>
+<label><input type="radio" name="gender" value="female" <?php
+if (!empty($_POST['gender']) && $_POST['gender'] === 'female') echo 'checked';
+?>>女性</label>
 </div>
 <div class="element_wrap">
 <label for="age">年齢</label>
 <select id="age" name="age">
 <option value="">選択して下さい</option>
-<option value="1">〜１９歳</option>
-<option value="2">２０歳〜２９歳</option>
-<option value="3">３０歳〜３９歳</option>
-<option value="4">４０歳〜４９歳</option>
-<option value="5">５０歳〜５９歳</option>
-<option value="6">６０歳〜</option>
+<option value="1" <?php
+if (!empty($_POST['age']) && $_POST['age'] === '1') echo 'selected';
+?>>〜１９歳</option>
+<option value="2" <?php
+if (!empty($_POST['age']) && $_POST['age'] === '2') echo 'selected';
+?>>２０歳〜２９歳</option>
+<option value="3" <?php
+if (!empty($_POST['age']) && $_POST['age'] === '3') echo 'selected';
+?>>３０歳〜３９歳</option>
+<option value="4" <?php
+if (!empty($_POST['age']) && $_POST['age'] === '4') echo 'selected';
+?>>４０歳〜４９歳</option>
+<option value="5" <?php
+if (!empty($_POST['age']) && $_POST['age'] === '5') echo 'selected';
+?>>５０歳〜５９歳</option>
+<option value="6" <?php
+if (!empty($_POST['age']) && $_POST['age'] === '6') echo 'selected';
+?>>６０歳〜</option>
 </select>
 </div>
 <div class="element_wrap">
 <label for="contact">お問い合わせ内容</label>
-<textarea id="contact" name="contact"></textarea>
+<textarea id="contact" name="contact"><?php
+if (!empty($_POST['contact'])) echo $_POST['contact'];
+?></textarea>
 </div>
 <div class="element_wrap">
 <label>
 <input type="checkbox" name="agreement" value="1">プライバシーポリシーに同意する
 </label>
 </div>
-<input type="submit" name="btn_confirm" value="入力内容を確認する">
+<input type="submit" name="btn_confirm" value="入力内容を確認する" <?php
+if (!empty($_POST['agreement']) && $_POST['agreement'] === '1') echo 'checked';
+?>>
 </form>
 <?php endif; ?>
 </body>
