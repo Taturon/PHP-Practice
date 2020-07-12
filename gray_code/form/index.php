@@ -5,7 +5,7 @@ $clean = $error = [];
 
 // 入力値のエスケープ
 if (!empty($_POST)) {
-	foreach ($_POST ad $key => $value) {
+	foreach ($_POST as $key => $value) {
 		$clean[$key] = htmlspecialchars($value, ENT_QUOTES);
 	}
 }
@@ -169,6 +169,13 @@ if ($_POST['agreement'] === "1") {
 <?php elseif ($page_flg === 2): ?>
 <p><?php echo $message; ?></p>
 <?php else: ?>
+<?php if (!empty($error)): ?>
+<ul class="error_list">
+<?php foreach ($error as $value): ?>
+<li><?php echo $value; ?></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
 <form method="POST">
 <div class="element_wrap">
 <label for="name">氏名</label>
