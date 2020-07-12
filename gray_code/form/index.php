@@ -86,21 +86,29 @@ function validation($data) {
 	// 氏名のバリデーション
 	if (empty($data['name'])) {
 		$error[] = '氏名に空欄は無効です';
+	} elseif (mb_strlen($data['name']) > 20) {
+		$error[] = '氏名は20文字以内で入力してください';
 	}
 
 	// メールアドレスのバリデーション
 	if (empty($data['email'])) {
 		$error[] = 'メールアドレスに空欄は無効です';
+	} elseif (!preg_match(!(bool)filter_var($email, FILTER_VALIDATE_EMAIL))) {
+		$error[] = 'メールアドレスが有効ではありません';
 	}
 
 	// 性別のバリデーション
 	if (empty($data['gender'])) {
 		$error[] = '性別の選択は必須です';
+	} elseif ($data['gender'] !== 'male' && $data['gender'] !== 'female') {
+		$error[] = '性別の入力値が不正です';
 	}
 
 	// 年齢のバリデーション
 	if (empty($data['age'])) {
 		$error[] = '年齢の選択は必須です';
+	} elseif ((int)$data['age'] < 1 || (int)$data['age'] > 6) {
+		$error[] = '年齢の入力値が不正です';
 	}
 
 	// お問い合わせ内容のバリデーション
@@ -111,6 +119,8 @@ function validation($data) {
 	// プライバシポリシー同意のバリデーション
 	if (empty($data['contact'])) {
 		$error[] = 'プライバシポリシーをご確認ください';
+	} elseif ((int)$data['agreement'] !== 1) {
+		$error[] = 'プライバシポリシー同意の入力値が不正です';
 	}
 
 	return $error;
