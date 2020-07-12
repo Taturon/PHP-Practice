@@ -1,7 +1,7 @@
 <?php
 // 変数の初期化
 $page_flg = 0;
-$clean = [];
+$clean = $error = [];
 
 // 入力値のエスケープ
 if (!empty($_POST)) {
@@ -11,7 +11,13 @@ if (!empty($_POST)) {
 }
 
 if (!empty($_POST['btn_confirm'])) {
-	$page_flg = 1;
+
+	$error = validation($clean);
+	
+	if (empty($error)) {
+		$page_flg = 1;
+	}
+
 } elseif (!empty($_POST['btn_submit'])) {
 	$page_flg = 2;
 
@@ -71,6 +77,18 @@ if (!empty($_POST['btn_confirm'])) {
 	} else {
 		$message = 'メール送信に失敗しました';
 	}
+}
+
+// バリデーション関数の定義
+function validation($data) {
+	$error = [];
+
+	// 氏名のバリデーション
+	if (empty($data['name'])) {
+		$error[] = '氏名に空欄は無効です';
+	}
+
+	return $error;
 }
 ?>
 
