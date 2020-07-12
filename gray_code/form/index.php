@@ -1,6 +1,14 @@
 <?php
 // 変数の初期化
 $page_flg = 0;
+$clean = [];
+
+// 入力値のエスケープ
+if (!empty($_POST)) {
+	foreach ($_POST ad $key => $value) {
+		$clean[$key] = htmlspecialchars($value, ENT_QUOTES);
+	}
+}
 
 if (!empty($_POST['btn_confirm'])) {
 	$page_flg = 1;
