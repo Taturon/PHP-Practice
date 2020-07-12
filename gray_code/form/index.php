@@ -88,6 +88,31 @@ function validation($data) {
 		$error[] = '氏名に空欄は無効です';
 	}
 
+	// メールアドレスのバリデーション
+	if (empty($data['email'])) {
+		$error[] = 'メールアドレスに空欄は無効です';
+	}
+
+	// 性別のバリデーション
+	if (empty($data['gender'])) {
+		$error[] = '性別の選択は必須です';
+	}
+
+	// 年齢のバリデーション
+	if (empty($data['age'])) {
+		$error[] = '年齢の選択は必須です';
+	}
+
+	// お問い合わせ内容のバリデーション
+	if (empty($data['contact'])) {
+		$error[] = 'お問い合わせ内容に空欄は無効です';
+	}
+
+	// プライバシポリシー同意のバリデーション
+	if (empty($data['contact'])) {
+		$error[] = 'プライバシポリシーをご確認ください';
+	}
+
 	return $error;
 }
 ?>
@@ -230,12 +255,12 @@ if (!empty($_POST['contact'])) echo $_POST['contact'];
 </div>
 <div class="element_wrap">
 <label>
-<input type="checkbox" name="agreement" value="1">プライバシーポリシーに同意する
+<input type="checkbox" name="agreement" value="1" <?php
+if (!empty($_POST['agreement']) && $_POST['agreement'] === '1') echo 'checked';
+?>>プライバシーポリシーに同意する
 </label>
 </div>
-<input type="submit" name="btn_confirm" value="入力内容を確認する" <?php
-if (!empty($_POST['agreement']) && $_POST['agreement'] === '1') echo 'checked';
-?>>
+<input type="submit" name="btn_confirm" value="入力内容を確認する">
 </form>
 <?php endif; ?>
 </body>
