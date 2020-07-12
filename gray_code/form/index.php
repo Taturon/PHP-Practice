@@ -24,9 +24,38 @@ if (!empty($_POST['btn_confirm'])) {
 	// 本文を設定
 	$auto_reply_text = 'この度は、お問い合わせ頂き誠にありがとうございます。下記の内容でお問い合わせを受け付けました。\n\n';
 	$auto_reply_text .= 'お問い合わせ日時:' . date('Y-m-d H:i') . "\n";
-	$auto_reply_text .= '氏名:' . $_POST['name'];
-	$auto_reply_text .= 'メールアドレス:' . $_POST['email'];
-	$auto_reply_text .= 'タツロン®️';
+	$auto_reply_text .= '氏名:' . $_POST['name'] . "\n";
+	$auto_reply_text .= 'メールアドレス:' . $_POST['email'] . "\n";
+
+	if ($_POST['gender'] === 'male') {
+		$auto_reply_text .= "性別:男性\n";
+	} else {
+		$auto_reply_text .= "性別:女性\n";
+	}
+
+	switch ($_POST['age']) {
+		case "1":
+			$auto_reply_text .= '〜１９歳';
+			break;
+		case "2":
+			$auto_reply_text .= '２０歳〜２９歳';
+			break;
+		case "3":
+			$auto_reply_text .= '３０歳〜３９歳';
+			break;
+		case "4":
+			$auto_reply_text .= '４０歳〜４９歳';
+			break;
+		case "5":
+			$auto_reply_text .= '５０歳〜５９歳';
+			break;
+		case "6":
+			$auto_reply_text .= '６０歳〜';
+			break;
+	}
+
+	$auto_reply_text .= 'お問い合わせ内容:' . nl2br($_POST['contact']) . "\n\n";
+	$auto_reply_text .= 'GRAYCODE事務局' . "\n";
 
 	// メール送信
 	if (mb_send_mail($_POST['email'], $auto_reply_subject, $auto_reply_text, $header)) {
@@ -69,7 +98,7 @@ if ($_POST['gender'] === 'male') {
 <label for="age">年齢</label>
 <p id="age"><?php
 switch ($_POST['age']) {
-	case "2":
+	case "1":
 		echo '〜１９歳';
 		break;
 	case "2":
