@@ -197,6 +197,12 @@ switch ($_POST['age']) {
 <label for="contact">お問い合わせ内容</label>
 <p id="contact"><?php echo nl2br($_POST['contact']); ?></p>
 </div>
+<?php if (!empty($clean['attachment_file'])): ?>
+<div class="element_wrap">
+<label>画像ファイルの添付</label>
+<p><img src="<?php echo FILE_DIR . $clean['attachment_file']; ?>"></p>
+</div>
+<?php endif; ?>
 <div class="element_wrap">
 <label for="agreement">プライバシーポリシー</label>
 <p id="agreement"><?php
@@ -213,6 +219,9 @@ if ($_POST['agreement'] === "1") {
 <input type="hidden" name="gender" value="<?php echo $_POST['gender']; ?>">
 <input type="hidden" name="age" value="<?php echo $_POST['age']; ?>">
 <input type="hidden" name="contact" value="<?php echo $_POST['contact']; ?>">
+<?php if (!empty($clean['attachment_file'])): ?>
+<input type="hidden" name="attachment_file" value="<?php echo $_POST['attachment_file']; ?>">
+<?php endif; ?>
 <input type="hidden" name="agreement" value="<?php echo $_POST['agreement']; ?>">
 </form>
 <?php elseif ($page_flg === 2): ?>
