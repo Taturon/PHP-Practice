@@ -154,16 +154,16 @@ function validation($data) {
 <form method="POST">
 <div class="element_wrap">
 <label for="name">氏名</label>
-<p id="name"><?php echo $_POST['name']; ?></p>
+<p id="name"><?php echo $clean['name']; ?></p>
 </div>
 <div class="element_wrap">
 <label for="email">メールアドレス</label>
-<p id="email"><?php echo $_POST['email']; ?></p>
+<p id="email"><?php echo $clean['email']; ?></p>
 </div>
 <div class="element_wrap">
 <label for="gender">性別</label>
 <p id="gender"><?php
-if ($_POST['gender'] === 'male') {
+if ($clean['gender'] === 'male') {
 	echo '男性';
 } else {
 	echo '女性';
@@ -172,7 +172,7 @@ if ($_POST['gender'] === 'male') {
 <div class="element_wrap">
 <label for="age">年齢</label>
 <p id="age"><?php
-switch ($_POST['age']) {
+switch ($clean['age']) {
 	case "1":
 		echo '〜１９歳';
 		break;
@@ -195,7 +195,7 @@ switch ($_POST['age']) {
 </div>
 <div class="element_wrap">
 <label for="contact">お問い合わせ内容</label>
-<p id="contact"><?php echo nl2br($_POST['contact']); ?></p>
+<p id="contact"><?php echo nl2br($clean['contact']); ?></p>
 </div>
 <?php if (!empty($clean['attachment_file'])): ?>
 <div class="element_wrap">
@@ -206,7 +206,7 @@ switch ($_POST['age']) {
 <div class="element_wrap">
 <label for="agreement">プライバシーポリシー</label>
 <p id="agreement"><?php
-if ($_POST['agreement'] === "1") {
+if ($clean['agreement'] === "1") {
 	echo '同意する';
 } else {
 	echo '同意しない';
@@ -214,15 +214,15 @@ if ($_POST['agreement'] === "1") {
 </div>
 <input type="submit" name="btn_back" value="戻る">
 <input type="submit" name="btn_submit" value="送信">
-<input type="hidden" name="name" value="<?php echo $_POST['name']; ?>">
-<input type="hidden" name="email" value="<?php echo $_POST['email']; ?>">
-<input type="hidden" name="gender" value="<?php echo $_POST['gender']; ?>">
-<input type="hidden" name="age" value="<?php echo $_POST['age']; ?>">
-<input type="hidden" name="contact" value="<?php echo $_POST['contact']; ?>">
+<input type="hidden" name="name" value="<?php echo $clean['name']; ?>">
+<input type="hidden" name="email" value="<?php echo $clean['email']; ?>">
+<input type="hidden" name="gender" value="<?php echo $clean['gender']; ?>">
+<input type="hidden" name="age" value="<?php echo $clean['age']; ?>">
+<input type="hidden" name="contact" value="<?php echo $clean['contact']; ?>">
 <?php if (!empty($clean['attachment_file'])): ?>
-<input type="hidden" name="attachment_file" value="<?php echo $_POST['attachment_file']; ?>">
+<input type="hidden" name="attachment_file" value="<?php echo $clean['attachment_file']; ?>">
 <?php endif; ?>
-<input type="hidden" name="agreement" value="<?php echo $_POST['agreement']; ?>">
+<input type="hidden" name="agreement" value="<?php echo $clean['agreement']; ?>">
 </form>
 <?php elseif ($page_flg === 2): ?>
 <p><?php echo $message; ?></p>
