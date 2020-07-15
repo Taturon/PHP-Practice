@@ -37,12 +37,18 @@ if (!empty($_POST['btn_confirm'])) {
 
 	// 変数の設定
 	$header = null;
+	$body = null;
 	$auto_reply_subject = null;
 	$auto_reply_text = null;
 	date_default_timezone_set('Asia/Tokyo');
 
+	// 日本語使用宣言
+	mb_language("ja");
+	mb_internal_encoding('UTF-8');
+
 	// ヘッダー情報を設定
 	$header = "MIME-Version: 1.0\n";
+	$header .= "Content-Type: multipart/mixed;boundary=\"__BOUNDARY__\"\n";
 	$header .= "From: GRYCODE <noreply@gray-code.con>\n";
 	$header .= "Reply-To: GRYCODE <noreply@gray-code.con>\n";
 
@@ -85,8 +91,24 @@ if (!empty($_POST['btn_confirm'])) {
 	$auto_reply_text .= 'お問い合わせ内容:' . nl2br($_POST['contact']) . "\n\n";
 	$auto_reply_text .= 'GRAYCODE事務局' . "\n";
 
+	// テキストメッセージをセット
+	$body = "__BOUNDARY__\n";
+	$body .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n\n";
+	$body .= $auto_reply_text . "\n";
+	$body .= "__BOUNDARY__\n";
+
+	// ファイル添付
+	if (!empty($clean['attachment_file'])) {
+		$body .= "Content-Type: application/octet-stream; name=\"{$clean['attachment_file']}\"\n";
+		$body .= "Content-Disposition: attachment; filename=\"{$clean['attachment_file']}\"\n";
+		$body .= "Content-Transfer-Encoding: base64\n";
+		$body .= "\n";
+		$body .= chunk_split(base64_encode(file_get_contents(FILE_DIR . $clean['attachment_file'])));
+		$body .= "--__BOUNDARY__\n";
+	}
+	
 	// メール送信
-	if (mb_send_mail($_POST['email'], $auto_reply_subject, $auto_reply_text, $header)) {
+	if (mb_send_mail($clean['email'], $auto_reply_subject, $body, $header)) {
 		$message = 'メールを送信致しました';
 	} else {
 		$message = 'メール送信に失敗しました';
