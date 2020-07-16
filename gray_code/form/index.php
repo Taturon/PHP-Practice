@@ -1,4 +1,7 @@
 <?php
+// セッションの開始・再開
+session_start();
+
 // ファイルアップロード先の定義
 define('FILE_DIR', 'images/test/');
 
@@ -13,7 +16,7 @@ if (!empty($_POST)) {
 	}
 }
 
-if (!empty($_POST['btn_confirm'])) {
+if (!empty($clean['btn_confirm'])) {
 
 	$error = validation($clean);
 	
@@ -30,88 +33,100 @@ if (!empty($_POST['btn_confirm'])) {
 
 	if (empty($error)) {
 		$page_flg = 1;
+
+		// セッションの設定
+		$_SESSION['page'] = true;
 	}
 
-} elseif (!empty($_POST['btn_submit'])) {
-	$page_flg = 2;
+} elseif (!empty($clean['btn_submit'])) {
 
-	// 変数の設定
-	$header = null;
-	$body = null;
-	$auto_reply_subject = null;
-	$auto_reply_text = null;
-	date_default_timezone_set('Asia/Tokyo');
+	if (!empty($_SESSION['page']) && $_SESSION['page'] === true) {
+		$page_flg = 2;
 
-	// 日本語使用宣言
-	mb_language("ja");
-	mb_internal_encoding('UTF-8');
+		// セッションの削除
+		unset($_SESSION['page']);
 
-	// ヘッダー情報を設定
-	$header = "MIME-Version: 1.0\n";
-	$header .= "Content-Type: multipart/mixed;boundary=\"__BOUNDARY__\"\n";
-	$header .= "From: GRYCODE <noreply@gray-code.con>\n";
-	$header .= "Reply-To: GRYCODE <noreply@gray-code.con>\n";
+		// 変数の設定
+		$header = null;
+		$body = null;
+		$auto_reply_subject = null;
+		$auto_reply_text = null;
+		date_default_timezone_set('Asia/Tokyo');
 
-	// 件名を設定
-	$auto_reply_subject = 'お問い合わせありがとうございます';
+		// 日本語使用宣言
+		mb_language("ja");
+		mb_internal_encoding('UTF-8');
 
-	// 本文を設定
-	$auto_reply_text = 'この度は、お問い合わせ頂き誠にありがとうございます。下記の内容でお問い合わせを受け付けました。\n\n';
-	$auto_reply_text .= 'お問い合わせ日時:' . date('Y-m-d H:i') . "\n";
-	$auto_reply_text .= '氏名:' . $_POST['name'] . "\n";
-	$auto_reply_text .= 'メールアドレス:' . $_POST['email'] . "\n";
+		// ヘッダー情報を設定
+		$header = "MIME-Version: 1.0\n";
+		$header .= "Content-Type: multipart/mixed;boundary=\"__BOUNDARY__\"\n";
+		$header .= "From: GRYCODE <noreply@gray-code.con>\n";
+		$header .= "Reply-To: GRYCODE <noreply@gray-code.con>\n";
 
-	if ($_POST['gender'] === 'male') {
-		$auto_reply_text .= "性別:男性\n";
+		// 件名を設定
+		$auto_reply_subject = 'お問い合わせありがとうございます';
+
+		// 本文を設定
+		$auto_reply_text = 'この度は、お問い合わせ頂き誠にありがとうございます。下記の内容でお問い合わせを受け付けました。\n\n';
+		$auto_reply_text .= 'お問い合わせ日時:' . date('Y-m-d H:i') . "\n";
+		$auto_reply_text .= '氏名:' . $_POST['name'] . "\n";
+		$auto_reply_text .= 'メールアドレス:' . $_POST['email'] . "\n";
+
+		if ($_POST['gender'] === 'male') {
+			$auto_reply_text .= "性別:男性\n";
+		} else {
+			$auto_reply_text .= "性別:女性\n";
+		}
+
+		switch ($_POST['age']) {
+			case "1":
+				$auto_reply_text .= '〜１９歳';
+				break;
+			case "2":
+				$auto_reply_text .= '２０歳〜２９歳';
+				break;
+			case "3":
+				$auto_reply_text .= '３０歳〜３９歳';
+				break;
+			case "4":
+				$auto_reply_text .= '４０歳〜４９歳';
+				break;
+			case "5":
+				$auto_reply_text .= '５０歳〜５９歳';
+				break;
+			case "6":
+				$auto_reply_text .= '６０歳〜';
+				break;
+		}
+
+		$auto_reply_text .= 'お問い合わせ内容:' . nl2br($_POST['contact']) . "\n\n";
+		$auto_reply_text .= 'GRAYCODE事務局' . "\n";
+
+		// テキストメッセージをセット
+		$body = "__BOUNDARY__\n";
+		$body .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n\n";
+		$body .= $auto_reply_text . "\n";
+		$body .= "__BOUNDARY__\n";
+
+		// ファイル添付
+		if (!empty($clean['attachment_file'])) {
+			$body .= "Content-Type: application/octet-stream; name=\"{$clean['attachment_file']}\"\n";
+			$body .= "Content-Disposition: attachment; filename=\"{$clean['attachment_file']}\"\n";
+			$body .= "Content-Transfer-Encoding: base64\n";
+			$body .= "\n";
+			$body .= chunk_split(base64_encode(file_get_contents(FILE_DIR . $clean['attachment_file'])));
+			$body .= "--__BOUNDARY__\n";
+		}
+
+		// メール送信
+		if (mb_send_mail($clean['email'], $auto_reply_subject, $body, $header)) {
+			$message = 'メールを送信致しました';
+		} else {
+			$message = 'メール送信に失敗しました';
+		}
+
 	} else {
-		$auto_reply_text .= "性別:女性\n";
-	}
-
-	switch ($_POST['age']) {
-		case "1":
-			$auto_reply_text .= '〜１９歳';
-			break;
-		case "2":
-			$auto_reply_text .= '２０歳〜２９歳';
-			break;
-		case "3":
-			$auto_reply_text .= '３０歳〜３９歳';
-			break;
-		case "4":
-			$auto_reply_text .= '４０歳〜４９歳';
-			break;
-		case "5":
-			$auto_reply_text .= '５０歳〜５９歳';
-			break;
-		case "6":
-			$auto_reply_text .= '６０歳〜';
-			break;
-	}
-
-	$auto_reply_text .= 'お問い合わせ内容:' . nl2br($_POST['contact']) . "\n\n";
-	$auto_reply_text .= 'GRAYCODE事務局' . "\n";
-
-	// テキストメッセージをセット
-	$body = "__BOUNDARY__\n";
-	$body .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n\n";
-	$body .= $auto_reply_text . "\n";
-	$body .= "__BOUNDARY__\n";
-
-	// ファイル添付
-	if (!empty($clean['attachment_file'])) {
-		$body .= "Content-Type: application/octet-stream; name=\"{$clean['attachment_file']}\"\n";
-		$body .= "Content-Disposition: attachment; filename=\"{$clean['attachment_file']}\"\n";
-		$body .= "Content-Transfer-Encoding: base64\n";
-		$body .= "\n";
-		$body .= chunk_split(base64_encode(file_get_contents(FILE_DIR . $clean['attachment_file'])));
-		$body .= "--__BOUNDARY__\n";
-	}
-	
-	// メール送信
-	if (mb_send_mail($clean['email'], $auto_reply_subject, $body, $header)) {
-		$message = 'メールを送信致しました';
-	} else {
-		$message = 'メール送信に失敗しました';
+		$page_flag = 0;
 	}
 }
 
