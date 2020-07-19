@@ -12,6 +12,14 @@ use App\Controller\AppController;
  */
 class ArticlesController extends AppController
 {
+
+	public function initialize()
+	{
+		parent::initialize();
+
+		$this->loadComponent('Flash');
+	}
+
     /**
      * Index method
      *
@@ -37,7 +45,7 @@ class ArticlesController extends AppController
             'contain' => [],
         ]);
 
-        $this->set('article', $article);
+        $this->set(compact('article'));
     }
 
     /**
